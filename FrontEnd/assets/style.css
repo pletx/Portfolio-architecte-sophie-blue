@@ -125,6 +125,31 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.filter_contener{
+	width: 100%;
+	align-items: center;
+	display: flex;
+}
+.filter{
+	display: flex;
+justify-items: center;
+	width: fit-content;
+}
+.filter .bouton_tri{
+	margin:10px;
+	width: auto;
+	padding: 9px 20px 9px 22px;
+	color: #1D6154;
+	background-color: white;
+	border-color: #1D6154;
+	border: solid;
+	border-radius: 1em;
+	}
+.bouton_tri:hover{
+color: rgb(255, 255, 255);
+background-color: #1D6154;
+cursor: pointer;
+}
 .gallery {
 	width: 100%;
 	display: grid;
@@ -141,14 +166,14 @@ li:hover {
 	width: 50%;
 margin: auto;
 }
-#contact > * {
+#contact   > * {
 	text-align: center;
 
 }
-#contact h2{
+#contact h2  {
 	margin-bottom: 20px;
 }
-#contact form {
+#contact form  #form-login form{
 	text-align: left;
 	margin-top:30px;
 	display: flex;
