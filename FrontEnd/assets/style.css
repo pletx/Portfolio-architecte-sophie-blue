@@ -98,6 +98,44 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+#zone-mode-edition{
+	position: absolute;
+width: 100%;
+top: 0;
+color: white;
+background-color: black;
+height: 29px;
+right: 0;
+display: flex;
+align-content: center;
+align-items: center;
+text-align: center;
+}
+#zone-mode-edition input{background-color: white;
+	color: black;
+	border: white;}
+
+.bouton-edition {
+	align-self: center;
+	text-decoration: none;
+}
+.bouton-edition :hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+.ajout-photo{display: none;
+	flex-direction: column;
+	background-color: white;display: flex;
+	flex-direction: column;
+	background-color: white;}
+.zone-depot{
+	background: #E8F1F6;
+}
+
+.liste_categorie{  display: flex;
+	flex-direction: column;
+	margin-top: 10px;
+  }
 #introduction {
 	display: flex;
 	align-items: center;
@@ -162,6 +200,45 @@ cursor: pointer;
 	width: 100%;
 
 }
+#page_ajout{display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;	
+	background-color: rgba(0, 0, 0, 0.44);
+	z-index: 1;}
+#page_edition{
+	
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;	
+	background-color: rgba(0, 0, 0, 0.44);
+	z-index: 1;
+	}
+
+#page_edition .portfolio_edit{
+	display: flex;
+	width: 50%;
+	height: fit-content;
+	background-color: aliceblue;
+	opacity: 1;
+	text-align: center;
+	/*display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 20px;*/
+	grid-row-gap: 20px;
+	flex-direction: column;
+
+}	
+
 #contact {
 	width: 50%;
 margin: auto;
@@ -173,7 +250,7 @@ margin: auto;
 #contact h2  {
 	margin-bottom: 20px;
 }
-#contact form  #form-login form{
+#contact form  {
 	text-align: left;
 	margin-top:30px;
 	display: flex;

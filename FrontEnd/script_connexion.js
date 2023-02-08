@@ -1,24 +1,33 @@
-var form = document.getElementById("form-login");
+const email = document.getElementById("email");
+const password = document.getElementById("Mot de passe");
+const boutonConnexion=document.getElementById("connexion");
 
-var email = document.getElementById("email");
-var password = document.getElementById("Mot de passe");
-console.log(password.value,email.value)
-form.addEventListener("submit",connexion(email,password))
-crossOrigin="anonymous"
+email.addEventListener('input', function() {
+  console.log('Email : ', email.value);
+});
+
+password.addEventListener('input', function() {
+  console.log('Mot de passe : ', password.value);
+});
+
+boutonConnexion.addEventListener("click", function() {
+  connexion(email.value,password.value);
+});
 function connexion(email,password){
-    
-    
-fetch("https://localhost:5678/api/login", {
-    headers: {
-        'Content-Type': 'application/json'
-      },
-    method: "POST",
-    body:{
-        "email": email,
-        "password": password
-      }
-})
-    .then(response => response.text())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-};
+  fetch("http://localhost:5678/api/users/login", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    "email": email,
+    "password": password
+  })
+  })
+  .then(response => response.json())
+  .then(data => {console.log(data)
+  })
+  .catch(error => {console.error(error)
+  })
+  }
+
