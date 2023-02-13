@@ -19,10 +19,8 @@
 		<div id="page_edition">
 			<div class="portfolio_edit">
 				<h2>Galerie photo</h2>
-				<label for="titre">Titre</label>
-				<input type="text" name="titre" id="titre">
-
-				<input type="submit" value="Ajouter une photo">
+				<div class="gallery-edit"></div>
+				<a class="bouton-ajout">Ajouter une photo</a>
 				<a href="">Supprimer la galerie</a>
 			</div>
 
@@ -31,7 +29,13 @@
 			<div class="ajout-photo">
 				<h2>Ajout Photo</h2>
 				<div class="zone-depot">
-					<input type="submit" value="Ajouter une photo">
+					<form>
+						<div>
+						  <label for="image">Sélectionnez une image :</label>
+						  <input type="file" id="image" accept="image/*">
+						</div>
+					  </form>
+					  
 				</div>
 
 				<label for="titre">Titre</label>
@@ -51,7 +55,7 @@
 
 		</div>
 		<div id="zone-mode-edition">
-			<div class="bouton-edition" href="#"> <i></i> Mode édition</div>
+			<a class="bouton-edition"> <i></i> Mode édition</a>
 			<input type="submit" value="Publier les changement">
 		</div>
 		<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>

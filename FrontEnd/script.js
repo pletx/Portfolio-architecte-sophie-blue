@@ -1,89 +1,42 @@
-const zone_images = document.querySelector(".gallery");
+let zone_images = document.querySelector(".gallery");
 const bouton_Hotel = document.querySelector(".bouton_Hotel");
 const bouton_Appartements = document.querySelector(".bouton_Appartements");
 const bouton_Objets = document.querySelector(".bouton_Objets");
 const bouton_Tous = document.querySelector(".bouton_Tous");
 const bouton_edition = document.querySelector('.bouton-edition')
 const page_edition = document.querySelector('#page_edition')
-bouton_edition.addEventListener('click', function () { affichage_edition((page_edition)) })
-bouton_Tous.addEventListener("click", function () { reset(data, bouton_Tous.textContent) });
-bouton_Objets.addEventListener("click", function () { reset(data, bouton_Objets.textContent) });
-bouton_Appartements.addEventListener("click", function () { reset(data, bouton_Appartements.textContent) });
-bouton_Hotel.addEventListener("click", function () { reset(data, bouton_Hotel.textContent) });
-bouton_edition.addEventListener("click", function () {
-  page_edition.style.display = "flex";
-});
-/*fetch('http://localhost:5678/api/works')
-  .then(response => response.json())
-  .then(data => {
-    const bouton_Hotel = document.querySelector(".bouton_Hotel");
-    const bouton_Appartements = document.querySelector(".bouton_Appartements");
-    const bouton_Objets = document.querySelector(".bouton_Objets");
-    const bouton_Tous = document.querySelector(".bouton_Tous");
-    const bouton_edition = document.querySelector('.bouton-edition')
-    const page_edition = document.querySelector('#page_edition')
+bouton_Tous.addEventListener("click", function () { reset(bouton_Tous.textContent) });
+bouton_Objets.addEventListener("click", function () { reset(bouton_Objets.textContent) });
+bouton_Appartements.addEventListener("click", function () { reset(bouton_Appartements.textContent) });
+bouton_Hotel.addEventListener("click", function () { reset(bouton_Hotel.textContent) });
 
 
-
-    console.log(bouton_Tous.textContent)
-    affihage_img(data)
-    bouton_edition.addEventListener('click', function () { affichage_edition((page_edition)) })
-    bouton_Tous.addEventListener("click", function () { reset(data, bouton_Tous.textContent) });
-    bouton_Objets.addEventListener("click", function () { reset(data, bouton_Objets.textContent) });
-    bouton_Appartements.addEventListener("click", function () { reset(data, bouton_Appartements.textContent) });
-    bouton_Hotel.addEventListener("click", function () { reset(data, bouton_Hotel.textContent) });
-    bouton_edition.addEventListener("click", function () {
-      page_edition.style.display = "flex";
-    });
-  })
-  .catch(error => console.error(error));*/
-
-
-
-
-function recuperation(data, nom_clé) {
-  let tableau = [];
-  for (let donnée in data) {
-    tableau.push(data[donnée][nom_clé]);
-  }
-  return tableau
-}
-function affihage_img(image) {
-  console.log("image", image)
-  let image_url = recuperation(image, "imageUrl")
-  for (let i = 0; i < image_url.length; i++) {
-    let img = document.createElement("img");
-    let figure = document.createElement("figure")
-    let figcap = document.createElement("figcaption")
-    img.src = image_url[i];
-    img.crossOrigin = "anonymous";
-    figure.appendChild(img)
-    figure.appendChild(figcap)
-    zone_images.appendChild(figure);
-    figcap.innerHTML = recuperation(image, "title")[i]
-
-  }
-}
 function tri(data, type) {
   let tableau_trié = []
-  console.log(type)
-  if (type == 'Tous') { affihage_img(data) }
+  console.log(data)
+  if (type == 'Tous') { renderWorks(data) }
 
   else {
     for (let travaux in data) {
+      console.log(data[travaux]['category']['name'])
       if (data[travaux]['category']['name'] == type) {
         tableau_trié.push(data[travaux]);
       }
 
-    } affihage_img(tableau_trié)
+    } 
+    console.log('tableau',tableau_trié)
+    renderWorks(tableau_trié)
   }
 
 
 }
-function reset(data, type) {
-
+function reset(type) {
   zone_images.innerHTML = "";
-  tri(data, type)
+  let works = getWorks().then(
+    data=> tri(data, type));
+  
+    
+  
 
 }
 
@@ -100,23 +53,82 @@ function renderWorks(works) {
     zone_images.appendChild(figure);
   });
 }
+function renderWorksEdit(works) {
+  works.forEach(projet => {
+    let img = document.createElement("img");
+    let figcap = document.createElement("figcaption")
+    let div=document.createElement("div")
+    img.src = projet.imageUrl;
+    img.crossOrigin = "anonymous";
+    figcap.innerHTML = 'editer';
+
+
+    div.appendChild(img);
+    zone_images.appendChild(div)  
+    div.appendChild(figcap);
+  });
+}
+
 /**
  * Restitution des traveaux à partir de l'API
  * @returns 
  */
 function getWorks() {
-
-return fetch('http://localhost:5678/api/works')
+  return fetch('http://localhost:5678/api/works')
     .then(response => response.json())
-    .catch(error => console.error(error))
-    .then(data=>data);
-
+    .then(data => {
+      console.log("data array",data);
+      return data
+    })
+    .catch(error => console.error(error));
 }
 function init() {
-  let works = getWorks().then(
-    data=> renderWorks(data));
+    let works = getWorks().then(
+      data=> renderWorks(data));
+  renderWorks(works)
+}
+function authorize() {
+  let token = sessionStorage.getItem('token');
+  console.log(token)
+  if (token == null) {   
+    console.log( 'le token n existe pas')
+     } 
+  else {affichage_edition()
   
- 
+  }
 
 }
-init();
+function affichage_edition(){
+  const zoneEdition=document.querySelector('#zone-mode-edition')
+  zoneEdition.style.display = "flex";
+  bouton_edition.addEventListener("click", function () { page_edition.style.display = "flex"; 
+  const portfolio_edit=document.querySelector('.portfolio_edit')
+  portfolio_edit.style.display = "flex"
+  affihageGaleryEdit()
+});
+page_edition.addEventListener('click',function(){
+  page_edition.style.display='none'
+clean(zone_images)
+})
+const bouton_ajout = document.querySelector(".bouton-ajout")
+  bouton_ajout.addEventListener('click',function(){affichage_ajout()})
+  
+}
+function clean(zone){
+console.log('zone',zone)
+ zone.innerHTML = ""}
+  
+function affihageGaleryEdit(){
+  zone_images = document.querySelector(".gallery-edit");
+ 
+  fetch('http://localhost:5678/api/works')
+  .then(response => response.json())
+  .then(data => {renderWorksEdit(data)})
+  .catch(error => console.error(error))
+}
+function affichage_ajout(){
+  page_ajout=document.querySelector("#page_ajout");
+  page_ajout.style.display = "flex";
+}
+init()
+authorize() 
