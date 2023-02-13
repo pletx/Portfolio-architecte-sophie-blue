@@ -32,7 +32,7 @@ function tri(data, type) {
 }
 function reset(type) {
   zone_images.innerHTML = "";
-  let works = getWorks().then(
+  getWorks().then(
     data=> tri(data, type));
   
     
@@ -83,9 +83,8 @@ function getWorks() {
     .catch(error => console.error(error));
 }
 function init() {
-    let works = getWorks().then(
+    getWorks().then(
       data=> renderWorks(data));
-  renderWorks(works)
 }
 function authorize() {
   let token = sessionStorage.getItem('token');
