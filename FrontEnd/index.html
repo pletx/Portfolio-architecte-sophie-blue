@@ -15,56 +15,45 @@
 
 <body>
 	<header>
+		<div id="page-edition"></div>
 
-		<div id="page_edition">
-			<div class="portfolio_edit">
+			<div class="portfolio-edit">
 				<h2>Galerie photo</h2>
 				<div class="gallery-edit"></div>
 				<a class="bouton-ajout">Ajouter une photo</a>
 				<a href="">Supprimer la galerie</a>
 			</div>
-
-		</div>
-		<div id="page_ajout">
 			<div class="ajout-photo">
 				<h2>Ajout Photo</h2>
 				<div class="zone-depot">
 					<form>
 						<div>
-						  <label for="image">Sélectionnez une image :</label>
-						  <input type="file" id="image" accept="image/*">
+							<input type="file" accept="image/*" onchange="previewImage(event)"
+							id="image-input">
+							<img id="preview" src="#" alt="Image preview">
+							<p>jpg, png : 4mo max</p>
 						</div>
-					  </form>
-					  
+					</form>
 				</div>
-
-				<label for="titre">Titre</label>
-				<input type="text" name="titre" id="titre">
-				<label for="titre">Catégories</label>
-				<div class="liste-deroulante">
-					<a href="#">Catégories</a>
-					<div class="liste_categorie">
-						<a href="#">Objets</a>
-						<a href="#">Appartements</a>
-						<a href="#">Bar & Restaurant</a>
-					</div>
-				</div>
-				<input type="text" name="validé" id="validé">
+				<label for="titre-image">Titre</label>
+				<input type="text" name="titre" id="titre-image">
+				<label for="category">Catégories</label>
+				<select name="category" id="category">
+				</select>
+				<input type="submit" value="Valider" class="bouton-validé">
 			</div>
+		
 
-
-		</div>
 		<div id="zone-mode-edition">
 			<a class="bouton-edition"> <i></i> Mode édition</a>
 			<input type="submit" value="Publier les changement">
 		</div>
-		<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
-
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li>projets</li>
+				<li> projets</li>
 				<li>contact</li>
-				<li><a href="./page_login.html"> login</a></li>
+				<li class="bouton-login"><a> login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -89,18 +78,16 @@
 			<h2>Mes Projets</h2>
 			<div class="filter_contener">
 				<div class="filter">
-					<div class="bouton_tri bouton_Tous">Tous</div>
-					<div class="bouton_tri bouton_Objets">Objets</div>
-					<div class="bouton_tri bouton_Appartements">Appartements</div>
-					<div class="bouton_tri bouton_Hotel">Hotels & restaurants</div>
+					<div class="bouton_tri bouton-Tous">Tous</div>
+					<div class="bouton_tri bouton-Objets">Objets</div>
+					<div class="bouton_tri bouton-Appartements">Appartements</div>
+					<div class="bouton_tri bouton-Hotel">Hotels & restaurants</div>
 				</div>
 			</div>
 			<div class="gallery">
 
 			</div>
 		</section>
-
-
 		<section id="contact">
 			<h2>Contact</h2>
 			<p>Vous avez un projet ? Discutons-en !</p>
@@ -115,7 +102,6 @@
 			</form>
 		</section>
 	</main>
-
 	<footer>
 		<nav>
 			<ul>
