@@ -10,12 +10,20 @@ const zoneEdition = document.querySelector('#zone-mode-edition')
 const portfolio_edit = document.querySelector('.portfolio-edit')
 bouton_login=document.querySelector(".bouton-login")
 const category=document.querySelector('#category')
+bouton_validé = document.querySelector(".bouton-validé")
+bouton_validé.addEventListener('click', function () {
+  recupImg()
+  close()
+  reset('Tous')
+})
 bouton_login.addEventListener('click',function(){loginCheck()})
 bouton_Tous.addEventListener("click", function () { reset(bouton_Tous.textContent) });
 bouton_Objets.addEventListener("click", function () { reset(bouton_Objets.textContent) });
 bouton_Appartements.addEventListener("click", function () { reset(bouton_Appartements.textContent) });
 bouton_Hotel.addEventListener("click", function () { reset(bouton_Hotel.textContent) });
-
+function checkPresence(array, element) {
+  return array.includes(element);
+}
 
 function tri(data, type) {
   let tableau_trié = []
@@ -24,13 +32,16 @@ function tri(data, type) {
 
   else {
     for (let travaux in data) {
-      console.log(data[travaux]['category']['name'])
+      console.log(tableau_trié['title'])
       if (data[travaux]['category']['name'] == type) {
-        tableau_trié.push(data[travaux]);
+        if(checkPresence(tableau_trié,data[travaux][['title']])==false){
+         tableau_trié.push(data[travaux]);}
+       
       }
 
     }
     console.log('tableau trié', tableau_trié)
+   
     renderWorks(tableau_trié)
   }
 
@@ -38,13 +49,10 @@ function tri(data, type) {
 }
 function reset(type) {
   console.log('reset')
+  zone_images = document.querySelector(".gallery");
   zone_images.innerHTML = "";
   getWorks().then(
     data => tri(data, type));
-
-
-
-
 }
 function previewImage(event) {
   var input = event.target;
@@ -105,6 +113,7 @@ function logout(){
 }
 function renderCategoryList(categoryList){ 
   console.log('categoryList',categoryList)
+
   categoryList.forEach(type =>{
   console.log('type',type)
   let option=document.createElement('option')
@@ -169,22 +178,25 @@ function affichage_edition() {
     page_edition.style.display = "flex";
     portfolio_edit.style.display = "flex"
     ajout_photo.style.display = 'none'
+    clean()
     getGalleryEdit()
   });
   page_edition.addEventListener('click', function () {
-    clean(zone_images)
-    ajout_photo.style.display = 'none'
-    portfolio_edit.style.display = 'none'
-    page_edition.style.display = 'none'
-
+    close()
   })
+}
+function close(){
+ajout_photo.style.display = 'none'
+portfolio_edit.style.display = 'none'
+page_edition.style.display = 'none'
+
 }
 function effaceEdition(){
   zoneEdition.style.display = "none";
 }
-function clean(zone) {
-
-  zone.innerHTML = ""
+function clean() {
+  zone_images = document.querySelector(".gallery-edit");
+  zone_images.innerHTML = ""
 }
 function getGalleryEdit() {
   zone_images = document.querySelector(".gallery-edit");
@@ -203,10 +215,7 @@ function affichage_ajout() {
     ajout_photo.style.display = 'flex'
     portfolio_edit.style.display = "none"
   })
-  getCategory().then(
-    data => renderCategoryList(data));
-  bouton_validé = document.querySelector(".bouton-validé")
-  bouton_validé.addEventListener('click', function () {recupImg()})
+ 
 }
 function recupImg() {
   // Récupérer le fichier image à partir de la zone d'import
@@ -222,44 +231,54 @@ function recupImg() {
   const imageType = document.querySelector('#category').value;
   formData.append('title', titre);
   formData.append('category', imageType);
-
-  console.log(formData);
-
+  console.log('form',formData);
   workPost(formData);
+  
+  
 }
-function workPost(formData) {
-  fetch('http://localhost:5678/api/works', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-    },
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error))
+async function workPost(formData) {
+  try {
+    const response = await fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+      },
+      body: formData
+    });
+    const data = await response.json();
+    console.log(data);
+    reset('Tous'); // appel à la fonction reset après l'ajout du nouveau travail
+  } catch (error) {
+    console.error(error);
+  }
 }
-function removeImage(boutonDel) {
 
+
+function removeImage(boutonDel) {
   let image =  boutonDel.parentNode
   let galery=image.parentNode
   var index = Array.prototype.indexOf.call(galery.children, image);
   getWorks().then(
     data =>workDel(data[index]["id"]));
+    close()  
 }
-function workDel(index) {
-  fetch('http://localhost:5678/api/works/'+index, {
-    method: 'DELETE',
-    headers: {
-      'Accept': '*/*',
-      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-    }
-  })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => console.error(error));
+async function workDel(index) {
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${index}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': '*/*',
+        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+      }
+    });
+    console.log(response);
+    reset('Tous');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 init()
 authorize() 
+getCategory().then(
+  data => renderCategoryList(data));
