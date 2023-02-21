@@ -21,14 +21,14 @@ form.addEventListener("submit", function(event) {
     .then(data => {
       localStorage.setItem('token',data.token)
       if(localStorage.getItem('token')=="undefined"){
-        alert('E-mail ou mot de passe incorrect. Veuillez réessayer.');
+        alert('Email ou mot de passe Eronné.Veuillez réessayer.');
       }
       login(data)
       
     })
     .catch(error => {
       console.error(error);
-      alert('Incorrect email or password. Please try again.');
+      
     });
 });
 function tokenAdmin(data){

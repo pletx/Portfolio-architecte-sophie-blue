@@ -8,50 +8,60 @@ const page_edition = document.querySelector('#page-edition')
 const ajout_photo = document.querySelector('.ajout-photo')
 const zoneEdition = document.querySelector('#zone-mode-edition')
 const portfolio_edit = document.querySelector('.portfolio-edit')
-const titreImage=document.querySelector('#titre-image')
-const bouton_login=document.querySelector(".bouton-login")
-const category=document.querySelector('#category')
+const titreImage = document.querySelector('#titre-image')
+const bouton_login = document.querySelector(".bouton-login")
+const category = document.querySelector('#category')
 const boutonValidé = document.querySelector(".bouton-validé")
-const zoneDepot=document.querySelector(".zone-depot")
-const imageInput=document.querySelector('#image-input')
+const zoneDepot = document.querySelector(".zone-depot")
+const imageInput = document.querySelector('#image-input')
+const preview = document.querySelector("#preview");
+const titreAjoutPhoto = document.querySelector(".titre-ajout-photo")
 
-
-bouton_login.addEventListener('click',function(){loginCheck()})
+bouton_login.addEventListener('click', function () { loginCheck() })
 bouton_Tous.addEventListener("click", function () { reset(bouton_Tous.textContent) });
 bouton_Objets.addEventListener("click", function () { reset(bouton_Objets.textContent) });
 bouton_Appartements.addEventListener("click", function () { reset(bouton_Appartements.textContent) });
 bouton_Hotel.addEventListener("click", function () { reset(bouton_Hotel.textContent) });
-boutonValidé.addEventListener('click', function () {if(boutonValidé.textContent=="Valider")
-{  recupImg()
-  close()
-  reset('Tous')}
+boutonValidé.addEventListener('click', function () {
+  if (boutonValidé.value == "Valider") {
+    recupImg()
+   
+  }
 
 })
 
 function checkPresence(array, element) {
+
   return array.includes(element);
 }
 
 function tri(data, type) {
   let tableau_trié = []
-  console.log(data)
-  if (type == 'Tous') { renderWorks(data) }
-
+  let tableauTitre = []
+  if (type == 'Tous') {
+    for (let travaux in data) {
+      if (checkPresence(tableauTitre, data[travaux]['title']) == false) {
+        tableau_trié.push(data[travaux]);
+        tableauTitre.push(data[travaux]['title'])
+      }
+    }
+  }
   else {
     for (let travaux in data) {
-      console.log(tableau_trié['title'])
+      console.log("..................", type, data[travaux]['category']['name'])
       if (data[travaux]['category']['name'] == type) {
-        if(checkPresence(tableau_trié,data[travaux][['title']])==false){
-         tableau_trié.push(data[travaux]);}
-       
+        if (checkPresence(tableauTitre, data[travaux]['title']) == false) {
+          tableau_trié.push(data[travaux]);
+          tableauTitre.push(data[travaux]['title'])
+        }
+        if (checkPresence(tableauTitre, data[travaux]['title']) == true) {
+          workDel(data[travaux]['category']['id'])
+        }
       }
-
     }
     console.log('tableau trié', tableau_trié)
-   
-    renderWorks(tableau_trié)
   }
-
+  return tableau_trié
 
 }
 function reset(type) {
@@ -59,7 +69,7 @@ function reset(type) {
   zone_images = document.querySelector(".gallery");
   zone_images.innerHTML = "";
   getWorks().then(
-    data => tri(data, type));
+    data => renderWorks(tri(data, type)));
 }
 function renderWorks(works) {
   zone_images = document.querySelector(".gallery");
@@ -83,45 +93,49 @@ function renderWorksEdit(works) {
     imgGallery.className = 'imgGallery'
     let boutonDel = document.createElement("div")
     boutonDel.className = 'boutonDel'
-    boutonDel.addEventListener('click',function(){removeImage(boutonDel)})
+    boutonDel.addEventListener('click', function () { removeImage(boutonDel) })
     img.src = projet.imageUrl;
     img.crossOrigin = "anonymous";
     figcap.innerHTML = 'éditer';
-    figcap.addEventListener('click',function(){ editImage(figcap)})
+    figcap.addEventListener('click', function () { editImage(figcap) })
     zone_images.appendChild(imgGallery)
     imgGallery.appendChild(img);
     imgGallery.appendChild(figcap);
     imgGallery.appendChild(boutonDel)
-   
-    
+
+
+
   });
 }
-function loginCheck(){
+function loginCheck() {
   console.log(bouton_login.textContent)
-  if(bouton_login.textContent=='login'){
+  if (bouton_login.textContent == 'login') {
 
-    window.location.href = "./page_login.html"}
+    window.location.href = "./page_login.html"
+  }
 
-else{
-  logout()
-  effaceEdition()
-  bouton_login.textContent='login'}
+  else {
+    logout()
+    effaceEdition()
+    bouton_login.textContent = 'login'
+  }
 
 }
-function logout(){
+function logout() {
   localStorage.removeItem('token')
 }
-function renderCategoryList(categoryList){ 
-  console.log('categoryList',categoryList)
+function renderCategoryList(categoryList) {
+  console.log('categoryList', categoryList)
 
-  categoryList.forEach(type =>{
-  console.log('type',type)
-  let option=document.createElement('option')
-  option.value=type['id']
-  option.textContent=type['name']
-  category.appendChild(option)});
+  categoryList.forEach(type => {
+    console.log('type', type)
+    let option = document.createElement('option')
+    option.value = type['id']
+    option.textContent = type['name']
+    category.appendChild(option)
+  });
 }
-  
+
 function getCategory() {
   return fetch('http://localhost:5678/api/categories')
     .then(response => response.json())
@@ -149,15 +163,15 @@ function getWorks() {
  */
 function init() {
   getWorks().then(
-    data => renderWorks(data));
+    data => renderWorks(tri(data, 'Tous')));
 }
 /**
  * Verification de la presence d'un token
  */
 function authorize() {
   let token = localStorage.getItem('token');
-  let trueToken=localStorage.getItem('trueToken')
-  console.log(token,trueToken)
+  let trueToken = localStorage.getItem('trueToken')
+  console.log(token, trueToken)
   if (token == null) {
     console.log('le token n existe pas')
     effaceEdition()
@@ -166,12 +180,12 @@ function authorize() {
     console.log('le token n existe pas')
     effaceEdition()
   }
-  if (token==trueToken){
+  if (token == trueToken) {
     if (trueToken != null) {
-    bouton_login.textContent='logout'
-    affichageBarreEdition()
+      bouton_login.textContent = 'logout'
+      affichageBarreEdition()
+    }
   }
-}
 }
 function affichageBarreEdition() {
   zoneEdition.style.display = "flex";
@@ -186,15 +200,14 @@ function affichageBarreEdition() {
     close()
   })
 }
-function close(){
-ajout_photo.style.display = 'none'
-if(preview!="undefined"){preview.remove()}
+function close() {
+  ajout_photo.style.display = 'none'
 
-portfolio_edit.style.display = 'none'
-page_edition.style.display = 'none'
+  portfolio_edit.style.display = 'none'
+  page_edition.style.display = 'none'
 
 }
-function effaceEdition(){
+function effaceEdition() {
   zoneEdition.style.display = "none";
 }
 function clean() {
@@ -206,44 +219,46 @@ function getGalleryEdit() {
   fetch('http://localhost:5678/api/works')
     .then(response => response.json())
     .then(data => {
-      renderWorksEdit(data)
+      renderWorksEdit(tri(data, 'Tous'))
       affichageAjout()
     })
     .catch(error => console.error(error))
 
 }
 function affichageAjout() {
+  
   bouton_ajout = document.querySelector(".bouton-ajout")
-  boutonValidé.value='Valider'
+  boutonValidé.value = 'Valider'
+  titreAjoutPhoto.textContent = 'Ajout photo'
   bouton_ajout.addEventListener('click', function () {
     ajout_photo.style.display = 'flex'
     portfolio_edit.style.display = "none"
-    
+    preview.src=''
+    titreImage.value = ''
+    category.value = ''
+    imageInput.value = ''
+
   })
 
 }
-function affichageAjoutModif(work){
+function affichageAjoutModif(work) {
   console.log(imageInput.files[0])
+  preview.src=''
+  titreAjoutPhoto.textContent = work['title']
   ajout_photo.style.display = 'flex'
-  boutonValidé.value='Modifié'
+  boutonValidé.value = 'Modifié'
   portfolio_edit.style.display = "none"
-  titreImage.value=work['title']
-  category.value=work['category']['id']
-  imageInput.value=''
-  previewImage(work)
- boutonValidé.addEventListener('click',function(){workEdit(work)})
-  
+  titreImage.value = work['title']
+  category.value = work['category']['id']
+  imageInput.value = ''
+
+  boutonValidé.addEventListener('click', function () { workEdit(work) })
+
 }
-function previewImage(work){
-  const preview = document.createElement("img");
-  preview.src=work['imageUrl']
-  preview.id='preview'
-  preview.crossOrigin = "anonymous";
-  zoneDepot.appendChild(preview)
-}
-function changePreviewImage(){
-  console.log('file',imageInput.files[0])
-  preview.src="./assets/images/"+imageInput.files[0]['name']
+
+function changePreviewImage() {
+  console.log('file', imageInput.files[0])
+  preview.src = "./assets/images/" + imageInput.files[0]['name']
 }
 function recupImg() {
   // Récupérer le fichier image à partir de la zone d'import;
@@ -252,16 +267,35 @@ function recupImg() {
   // Créer un objet FormData pour inclure le fichier dans la requête
   const formData = new FormData();
   formData.append('image', imageFile);
-  
+
   // Ajouter les autres champs du formulaire à FormData
   const titre = document.querySelector('#titre-image').value;
   const imageType = document.querySelector('#category').value;
   formData.append('title', titre);
   formData.append('category', imageType);
-  console.log('form',formData);
-  workPost(formData);
+  console.log("Imagefile",imageFile);
+  if(imageFile == undefined){
+    alert('Entrez une image')
+  }
+  if (titre == '') {
+    alert('Entrez un titre')
+  }
+  if (category == '') {
+    alert('Selectionnez un catergorie')
+  }
   
-  
+
+  else{
+    if (titre != ''){
+   if (category != '') {
+    if(imageFile !=undefined){
+    console.log('envoie')
+    workPost(formData);
+     close()
+    reset('Tous')}}}}
+ 
+
+
 }
 async function workPost(formData) {
   try {
@@ -280,27 +314,28 @@ async function workPost(formData) {
   }
 }
 function removeImage(boutonDel) {
-  let image =  boutonDel.parentNode
-  let galery=image.parentNode
+  let image = boutonDel.parentNode
+  let galery = image.parentNode
   var index = Array.prototype.indexOf.call(galery.children, image);
   getWorks().then(
-    data =>workDel(data[index]["id"]));
-    close()  
+    data => workDel(data[index]["id"]));
+  close()
+  reset('Tous')
 }
-function editImage(figcap){
-  let image =  figcap.offsetParent
-  let galery=image.parentNode
+function editImage(figcap) {
+  let image = figcap.offsetParent
+  let galery = image.parentNode
   console.log(image.firstChild)
   let index = Array.prototype.indexOf.call(galery.children, image);
   getWorks().then(
-    data =>affichageAjoutModif(data[index]));
+    data => affichageAjoutModif(data[index]));
 
- 
+
 }
 function workEdit(work) {
-  boutonValidé.removeEventListener('click',function(){workEdit(work)})
-  workDel(work['id'])
-  recupImg()
+  boutonValidé.removeEventListener('click', function () { workEdit(work) })  
+recupImg()
+ workDel(work['id'])
 }
 async function workDel(index) {
   try {
@@ -312,13 +347,12 @@ async function workDel(index) {
       }
     });
     console.log(response);
-    reset('Tous');
   } catch (error) {
     console.error(error);
   }
 }
 
 init()
-authorize() 
+authorize()
 getCategory().then(
   data => renderCategoryList(data));
