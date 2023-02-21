@@ -8,19 +8,26 @@ const page_edition = document.querySelector('#page-edition')
 const ajout_photo = document.querySelector('.ajout-photo')
 const zoneEdition = document.querySelector('#zone-mode-edition')
 const portfolio_edit = document.querySelector('.portfolio-edit')
-bouton_login=document.querySelector(".bouton-login")
+const titreImage=document.querySelector('#titre-image')
+const bouton_login=document.querySelector(".bouton-login")
 const category=document.querySelector('#category')
-bouton_validé = document.querySelector(".bouton-validé")
-bouton_validé.addEventListener('click', function () {
-  recupImg()
-  close()
-  reset('Tous')
-})
+const boutonValidé = document.querySelector(".bouton-validé")
+const zoneDepot=document.querySelector(".zone-depot")
+const imageInput=document.querySelector('#image-input')
+
+
 bouton_login.addEventListener('click',function(){loginCheck()})
 bouton_Tous.addEventListener("click", function () { reset(bouton_Tous.textContent) });
 bouton_Objets.addEventListener("click", function () { reset(bouton_Objets.textContent) });
 bouton_Appartements.addEventListener("click", function () { reset(bouton_Appartements.textContent) });
 bouton_Hotel.addEventListener("click", function () { reset(bouton_Hotel.textContent) });
+boutonValidé.addEventListener('click', function () {if(boutonValidé.textContent=="Valider")
+{  recupImg()
+  close()
+  reset('Tous')}
+
+})
+
 function checkPresence(array, element) {
   return array.includes(element);
 }
@@ -54,16 +61,6 @@ function reset(type) {
   getWorks().then(
     data => tri(data, type));
 }
-function previewImage(event) {
-  var input = event.target;
-  var preview = document.getElementById("preview");
-
-  var reader = new FileReader();
-  reader.onload = function() {
-    preview.src = reader.result;
-  };
-  reader.readAsDataURL(input.files[0]);
-}
 function renderWorks(works) {
   zone_images = document.querySelector(".gallery");
   works.forEach(projet => {
@@ -90,10 +87,13 @@ function renderWorksEdit(works) {
     img.src = projet.imageUrl;
     img.crossOrigin = "anonymous";
     figcap.innerHTML = 'éditer';
-    imgGallery.appendChild(img);
+    figcap.addEventListener('click',function(){ editImage(figcap)})
     zone_images.appendChild(imgGallery)
+    imgGallery.appendChild(img);
     imgGallery.appendChild(figcap);
     imgGallery.appendChild(boutonDel)
+   
+    
   });
 }
 function loginCheck(){
@@ -109,7 +109,7 @@ else{
 
 }
 function logout(){
-  sessionStorage.removeItem('token')
+  localStorage.removeItem('token')
 }
 function renderCategoryList(categoryList){ 
   console.log('categoryList',categoryList)
@@ -119,7 +119,8 @@ function renderCategoryList(categoryList){
   let option=document.createElement('option')
   option.value=type['id']
   option.textContent=type['name']
-  category.appendChild(option)});}
+  category.appendChild(option)});
+}
   
 function getCategory() {
   return fetch('http://localhost:5678/api/categories')
@@ -154,8 +155,8 @@ function init() {
  * Verification de la presence d'un token
  */
 function authorize() {
-  let token = sessionStorage.getItem('token');
-  let trueToken=sessionStorage.getItem('trueToken')
+  let token = localStorage.getItem('token');
+  let trueToken=localStorage.getItem('trueToken')
   console.log(token,trueToken)
   if (token == null) {
     console.log('le token n existe pas')
@@ -168,11 +169,11 @@ function authorize() {
   if (token==trueToken){
     if (trueToken != null) {
     bouton_login.textContent='logout'
-    affichage_edition()
+    affichageBarreEdition()
   }
 }
 }
-function affichage_edition() {
+function affichageBarreEdition() {
   zoneEdition.style.display = "flex";
   bouton_edition.addEventListener("click", function () {
     page_edition.style.display = "flex";
@@ -187,6 +188,8 @@ function affichage_edition() {
 }
 function close(){
 ajout_photo.style.display = 'none'
+if(preview!="undefined"){preview.remove()}
+
 portfolio_edit.style.display = 'none'
 page_edition.style.display = 'none'
 
@@ -204,22 +207,46 @@ function getGalleryEdit() {
     .then(response => response.json())
     .then(data => {
       renderWorksEdit(data)
-      affichage_ajout()
+      affichageAjout()
     })
     .catch(error => console.error(error))
 
 }
-function affichage_ajout() {
+function affichageAjout() {
   bouton_ajout = document.querySelector(".bouton-ajout")
+  boutonValidé.value='Valider'
   bouton_ajout.addEventListener('click', function () {
     ajout_photo.style.display = 'flex'
     portfolio_edit.style.display = "none"
+    
   })
- 
+
+}
+function affichageAjoutModif(work){
+  console.log(imageInput.files[0])
+  ajout_photo.style.display = 'flex'
+  boutonValidé.value='Modifié'
+  portfolio_edit.style.display = "none"
+  titreImage.value=work['title']
+  category.value=work['category']['id']
+  imageInput.value=''
+  previewImage(work)
+ boutonValidé.addEventListener('click',function(){workEdit(work)})
+  
+}
+function previewImage(work){
+  const preview = document.createElement("img");
+  preview.src=work['imageUrl']
+  preview.id='preview'
+  preview.crossOrigin = "anonymous";
+  zoneDepot.appendChild(preview)
+}
+function changePreviewImage(){
+  console.log('file',imageInput.files[0])
+  preview.src="./assets/images/"+imageInput.files[0]['name']
 }
 function recupImg() {
-  // Récupérer le fichier image à partir de la zone d'import
-  const imageInput = document.getElementById('image-input');
+  // Récupérer le fichier image à partir de la zone d'import;
   const imageFile = imageInput.files[0];
 
   // Créer un objet FormData pour inclure le fichier dans la requête
@@ -241,7 +268,7 @@ async function workPost(formData) {
     const response = await fetch('http://localhost:5678/api/works', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       },
       body: formData
     });
@@ -252,8 +279,6 @@ async function workPost(formData) {
     console.error(error);
   }
 }
-
-
 function removeImage(boutonDel) {
   let image =  boutonDel.parentNode
   let galery=image.parentNode
@@ -262,13 +287,28 @@ function removeImage(boutonDel) {
     data =>workDel(data[index]["id"]));
     close()  
 }
+function editImage(figcap){
+  let image =  figcap.offsetParent
+  let galery=image.parentNode
+  console.log(image.firstChild)
+  let index = Array.prototype.indexOf.call(galery.children, image);
+  getWorks().then(
+    data =>affichageAjoutModif(data[index]));
+
+ 
+}
+function workEdit(work) {
+  boutonValidé.removeEventListener('click',function(){workEdit(work)})
+  workDel(work['id'])
+  recupImg()
+}
 async function workDel(index) {
   try {
     const response = await fetch(`http://localhost:5678/api/works/${index}`, {
       method: 'DELETE',
       headers: {
         'Accept': '*/*',
-        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+        'Authorization': 'Bearer ' + localStorage.getItem('token'),
       }
     });
     console.log(response);

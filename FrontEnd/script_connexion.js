@@ -19,21 +19,24 @@ form.addEventListener("submit", function(event) {
   })
     .then(response => response.json())
     .then(data => {
-      sessionStorage.setItem('token',data.token)
-      console.log(sessionStorage.getItem('token'))
+      localStorage.setItem('token',data.token)
+      if(localStorage.getItem('token')=="undefined"){
+        alert('E-mail ou mot de passe incorrect. Veuillez réessayer.');
+      }
       login(data)
       
     })
     .catch(error => {
       console.error(error);
+      alert('Incorrect email or password. Please try again.');
     });
 });
 function tokenAdmin(data){
   if(email.value=="sophie.bluel@test.tld"){
-    if(sessionStorage.getItem('token') == 'undefined'){
+    if(localStorage.getItem('token') == 'undefined'){
     return false}
     else{    
-      sessionStorage.setItem('trueToken',data.token)
+      localStorage.setItem('trueToken',data.token)
       return true
     }
   }
@@ -41,7 +44,7 @@ function tokenAdmin(data){
 }
 function login(data){
   if (tokenAdmin(data)==true ){
-    console.log(sessionStorage)
+    console.log(localStorage)
     window.location.href = "./index.html";
   }
 }

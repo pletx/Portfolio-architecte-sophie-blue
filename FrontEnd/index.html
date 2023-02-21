@@ -25,12 +25,10 @@
 			</div>
 			<div class="ajout-photo">
 				<h2>Ajout Photo</h2>
-				<div class="zone-depot">
+				<div >
 					<form>
-						<div>
-							<input type="file" accept="image/*" onchange="previewImage(event)"
-							id="image-input">
-							<img id="preview" src="#" alt="Image preview">
+						<div class="zone-depot">
+							<input type="file" accept="image/*"id="image-input" onchange="changePreviewImage()">
 							<p>jpg, png : 4mo max</p>
 						</div>
 					</form>
