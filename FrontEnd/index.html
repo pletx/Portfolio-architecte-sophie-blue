@@ -11,29 +11,46 @@
 		rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" type="text/css" href="./assets/icons/fontawesome-free-6.2.0-web/css/all.css">
 </head>
 
 <body>
 	<header>
+		<div id="zone-mode-edition">
+			<a class="bouton-edition"> <i class="fa-regular fa-pen-to-square"></i> Mode édition</a>
+			<input type="submit" value="Publier les changement">
+		</div>
 		<div id="page-edition"></div>
+		<div id="modale">
+
 
 			<div class="portfolio-edit">
+				<i class="fa-solid fa-xmark"></i>
 				<h2>Galerie photo</h2>
+
 				<div class="gallery-edit"></div>
-				<a class="bouton-ajout">Ajouter une photo</a>
+				<div class="bouton-ajout">Ajouter une photo</div>
 				<a href="">Supprimer la galerie</a>
 			</div>
 			<div class="ajout-photo">
+				<i class="fa-solid fa-arrow-left"></i>
+				<i class="fa-solid fa-xmark"></i>
 				<h2 class="titre-ajout-photo">Ajout Photo</h2>
-				<div >
-					<form>
-						<div class="zone-depot">
-							<input type="file" accept="image/*"id="image-input" onchange="changePreviewImage()">
-							<img src="#" alt="" id="preview">
+
+
+				<div class="zone-depot">
+
+					<form class="form-import-image">
+						<img src="#" alt="" id="preview">
+						<div class="input-zone">
+							<label for="image-input" class="input-label">+Ajouer photo</label>
+							<input type="file" accept="image/*" id="image-input" onchange="changePreviewImage()">
 							<p>jpg, png : 4mo max</p>
 						</div>
 					</form>
 				</div>
+
+
 				<label for="titre-image">Titre</label>
 				<input type="text" name="titre" id="titre-image">
 				<label for="category">Catégories</label>
@@ -41,18 +58,15 @@
 				</select>
 				<input type="submit" value="Valider" class="bouton-validé">
 			</div>
-		
-
-		<div id="zone-mode-edition">
-			<a class="bouton-edition"> <i></i> Mode édition</a>
-			<input type="submit" value="Publier les changement">
 		</div>
+
+
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li> projets</li>
-				<li>contact</li>
-				<li class="bouton-login"><a> login</a></li>
+				<li><a href="#portfolio">projets</a></li>
+				<li><a href="#contact"> contact</a></li>
+				<li class="bouton-login"><a href="./page_login.html"> login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -62,6 +76,7 @@
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
 			</figure>
+			
 			<article>
 				<h2>Designer d'espace</h2>
 				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison
@@ -74,13 +89,11 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2>Mes Projets</h2>
-			<div class="filter_contener">
+			<h2>Mes Projets <a class="bouton-edition"> <i class="fa-regular fa-pen-to-square"></i> modifier</a>
+			</h2>
+				<div class="filter_contener">
 				<div class="filter">
 					<div class="bouton_tri bouton-Tous">Tous</div>
-					<div class="bouton_tri bouton-Objets">Objets</div>
-					<div class="bouton_tri bouton-Appartements">Appartements</div>
-					<div class="bouton_tri bouton-Hotel">Hotels & restaurants</div>
 				</div>
 			</div>
 			<div class="gallery">

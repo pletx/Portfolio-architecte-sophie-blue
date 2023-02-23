@@ -139,6 +139,7 @@ table {
 body {
 	max-width: 1140px;
 	margin: auto;
+	
 	font-family: 'Work Sans';
 	font-size: 14px;
 }
@@ -187,18 +188,20 @@ nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
-
-li:hover {
+nav li a{text-decoration: none;
+color: black;}
+.bouton-login{cursor: pointer;}
+li a:hover {
 	color: #B1663C;
 }
 
 #zone-mode-edition {
 	position: absolute;
 	width: 100%;
+	height: 59px;
 	top: 0;
 	color: white;
 	background-color: black;
-	height: 29px;
 	right: 0;
 	display: none;
 	justify-content: center;
@@ -206,14 +209,17 @@ li:hover {
 }
 
 #zone-mode-edition input {
+	padding: 9px 20px 9px 22px;
 	background-color: white;
 	margin: 0;
 	color: black;
 	align-self: center;
 	border: white;
+	width: fit-content;
 }
 
 .bouton-edition {
+	
 	align-self: center;
 	text-decoration: none;
 	cursor: pointer;
@@ -224,13 +230,7 @@ li:hover {
 	text-decoration: underline;
 }
 
-.imgGallery {
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	margin: 10px;
-	width: 17%;
-}
+
 
 .boutonDel {
 	top: 0;
@@ -238,41 +238,138 @@ li:hover {
 	background-color: black;
 	position: absolute;
 	width: 30%;
-	height: 20%;
+	height: 22%;
 	cursor: pointer;
 }
 
+#modale {
+	display: none;
+	width: 43%;
+	z-index: 1;
+	position: fixed;
+	text-align: center;
+	right: 27%;
+	height: 670px;
+	top: 3%;
+}
+#modale h2{margin-top: 30px;
+	margin-bottom: 18px;
+	font-family: Work Sans;
+font-size: 26px;
+font-weight: 400;
+line-height: 30px;
+letter-spacing: 0em;
+
+color: black;}
+
+.portfolio-edit {
+	display: none;
+	background-color: aliceblue;
+	flex-direction: column;
+	height: fit-content;
+	align-items: center;
+	padding-bottom: 36px;
+}
+.fa-solid{margin-top: 5px;
+	cursor: pointer;
+	width: fit-content;}
+
+.fa-arrow-left{top: 0;
+left: 0;
+margin: 18px 0 0 18px;
+position: absolute;}
+
+.fa-xmark{
+	margin:18px 18px 0 18px ;
+	top: 0;
+	right: 0;
+	position: absolute;
+}
 .ajout-photo {
 	display: none;
-	position: fixed;
+	width: 100%;
+	height: fit-content;
+	padding-bottom: 24px;
 	flex-direction: column;
 	background-color: white;
-	z-index: 1;
-	right: 37%;
-	width: 25%;
-	height: 75%;
 }
 
+.imgGallery {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	margin:0px 6px 26px 0;
+	width: 18%;
+	height: 100px;
+
+}
+.form-import-image{display: flex;
+flex-direction: column;
+  height: 100%;}
 .zone-depot {
 	background: #E8F1F6;
-	height: 25%;
+	width: 66%;
+	height: 162px;
+	align-self: center;
+	margin-bottom: 20px;
+}
+.bouton-projet{cursor: pointer;}
+#preview {
+	height: 46px;
+align-self: center;
+color: beige;
+opacity: 0.5;
+width: initial;
+margin-top: 28px;
+}
+#category,label{
+	margin-top: 21px;
+	text-align: initial;
+width: 66%;
 }
 
-#preview{
+.ajout-photo label{
+align-self: center;}
 
-	height:169px;
-}
+
 .liste_categorie {
 	display: flex;
 	flex-direction: column;
 	margin-top: 10px;
 }
+.ajout-photo input , select{
+height: 50px;
+width: 66%;
+font-size: 1.2em;
+border: none;
+box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+align-self: center;
+background-color: white;
+}
+#image-input{display: none;
+	text-align: initial;
+	width: 66%;
+	align-self: center;}
 
+.input-label{	
+	height: 36px;
+	width: 50%;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	color: #306685;
+	background-color: #CBD6DC;
+	font-size: 1.2em;
+	border-radius: 60px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	margin-bottom: 9px;
+	align-self: center;}
 #introduction {
 	display: flex;
 	align-items: center;
 }
-
+.input-zone{display: flex;
+flex-direction: column;}
 #introduction figure {
 	flex: 1
 }
@@ -299,16 +396,22 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
-
+#portfolio h2 a{
+	color: black;
+	font-size: small;
+	margin-left: 31px;
+}
 .filter_contener {
 	width: 100%;
-	align-items: center;
 	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .filter {
 	display: flex;
-	justify-items: center;
+	align-items: center;
+	justify-content: center;
 	width: fit-content;
 }
 
@@ -337,6 +440,7 @@ li:hover {
 }
 
 .gallery-edit {
+	width: 66%;
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -350,18 +454,8 @@ li:hover {
 	width: 100%;
 }
 
-#page_ajout {
-	display: none;
-	position: fixed;
-	justify-items: center;
-	align-items: center;
-	background-color: rgba(0, 0, 0, 0.44);
-	z-index: 1;
-	
-}
 
-#page-edition,
-#page_ajout {
+#page-edition {
 	display: none;
 	position: fixed;
 	top: 0;
@@ -374,69 +468,62 @@ li:hover {
 	z-index: 0;
 }
 
-.portfolio-edit {
-	display: none;
-	width: 25%;
-	height: fit-content;
-	position: fixed;
-	background-color: aliceblue;
-	opacity: 1;
-	text-align: center;
-	flex-direction: column;
-	z-index: 1;
-	right: 37%;
-}
+
 
 .portfolio-edit .bouton-ajout,
 .bouton-validé {
+	display: flex;
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
 	background-color: #1D6154;
 	margin: 2em auto;
 	width: 180px;
-	text-align: center;
+	height: 36px;
+	align-items: center;
+	justify-content: center;
 	border-radius: 60px;
 	cursor: pointer;
 }
 
-#contact {
+#contact,#login{
 	width: 50%;
 	margin: auto;
 }
 
-#contact>* {
+#contact>*,#login>*{
 	text-align: center;
 
 }
 
-#contact h2 {
+#contact h2,#login h2 {
 	margin-bottom: 20px;
+	font-family: Syne;
 }
 
-#contact form {
+#contact form ,#login form{
 	text-align: left;
 	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input,#login input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#contact label {
+#contact label ,#login label{
 	margin: 2em 0 1em 0;
 }
 
-#contact textarea {
+#contact textarea ,#login textarea{
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-
+#login a{align-self: center;}
 input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;

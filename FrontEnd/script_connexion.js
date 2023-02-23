@@ -1,8 +1,10 @@
+authorize()
 const form = document.getElementById("form");
 const email = document.getElementById("email");
 const password = document.getElementById("Mot-de-passe");
 const bouton_projet=document.querySelector(".bouton-projet")
-bouton_projet.addEventListener('click',function(){window.location.href = "./index.html"})
+const boutonLogin=document.querySelector('.bouton-login');
+boutonLogin.style.fontWeight="600"
 form.addEventListener("submit", function(event) {
   event.preventDefault();
 
@@ -45,6 +47,11 @@ function tokenAdmin(data){
 function login(data){
   if (tokenAdmin(data)==true ){
     console.log(localStorage)
+    window.location.href = "./index.html";
+  }
+}
+function authorize() {
+  if(localStorage.getItem('token')==localStorage.getItem('trueToken')){
     window.location.href = "./index.html";
   }
 }

@@ -1,9 +1,6 @@
 let zone_images = document.querySelector(".gallery");
-const bouton_Hotel = document.querySelector(".bouton-Hotel");
-const bouton_Appartements = document.querySelector(".bouton-Appartements");
-const bouton_Objets = document.querySelector(".bouton-Objets");
 const bouton_Tous = document.querySelector(".bouton-Tous");
-const bouton_edition = document.querySelector('.bouton-edition')
+const bouton_edition = document.querySelectorAll('.bouton-edition')
 const page_edition = document.querySelector('#page-edition')
 const ajout_photo = document.querySelector('.ajout-photo')
 const zoneEdition = document.querySelector('#zone-mode-edition')
@@ -13,15 +10,37 @@ const bouton_login = document.querySelector(".bouton-login")
 const category = document.querySelector('#category')
 const boutonValidé = document.querySelector(".bouton-validé")
 const zoneDepot = document.querySelector(".zone-depot")
+const body=document.querySelector('body')
 const imageInput = document.querySelector('#image-input')
 const preview = document.querySelector("#preview");
 const titreAjoutPhoto = document.querySelector(".titre-ajout-photo")
+const filter=document.querySelector(".filter")
+const modale=document.querySelector('#modale')
+const inputZone=document.querySelector(".input-zone")
+const arrow=document.querySelectorAll('.fa-arrow-left')
+console.log(arrow)
+arrow[0].addEventListener('click',function(){ajout_photo.style.display='none'
+portfolio_edit.style.display = "flex"})
+const xmarks=document.querySelectorAll('.fa-xmark')
 
-bouton_login.addEventListener('click', function () { loginCheck() })
-bouton_Tous.addEventListener("click", function () { reset(bouton_Tous.textContent) });
-bouton_Objets.addEventListener("click", function () { reset(bouton_Objets.textContent) });
-bouton_Appartements.addEventListener("click", function () { reset(bouton_Appartements.textContent) });
-bouton_Hotel.addEventListener("click", function () { reset(bouton_Hotel.textContent) });
+
+xmarks.forEach(xmark=>{
+  xmark.addEventListener('click',function(){close()})
+})
+
+ bouton_login.addEventListener('click', function () { loginCheck() })
+
+function butttonCreate(){
+  getCategory().then(
+    data=> {data.forEach(category => {
+      let bouton=document.createElement('div')
+      bouton.className='bouton_tri bouton-'+category['name'];
+      bouton.textContent=category['name']
+      filter.appendChild(bouton) 
+      bouton.addEventListener("click", function () { reset(bouton.textContent) })
+     
+    });  
+})}
 boutonValidé.addEventListener('click', function () {
   if (boutonValidé.value == "Valider") {
     recupImg()
@@ -87,6 +106,7 @@ function renderWorks(works) {
 }
 function renderWorksEdit(works) {
   works.forEach(projet => {
+  
     let img = document.createElement("img");
     let figcap = document.createElement("figcaption")
     let imgGallery = document.createElement("div")
@@ -94,6 +114,10 @@ function renderWorksEdit(works) {
     let boutonDel = document.createElement("div")
     boutonDel.className = 'boutonDel'
     boutonDel.addEventListener('click', function () { removeImage(boutonDel) })
+    icon=document.createElement('i')
+    icon.className="fa-solid fa-trash-can"
+    icon.style.color='white'
+    boutonDel.appendChild(icon)
     img.src = projet.imageUrl;
     img.crossOrigin = "anonymous";
     figcap.innerHTML = 'éditer';
@@ -102,6 +126,7 @@ function renderWorksEdit(works) {
     imgGallery.appendChild(img);
     imgGallery.appendChild(figcap);
     imgGallery.appendChild(boutonDel)
+    imgGallery.dataset.id=projet['id']
 
 
 
@@ -119,7 +144,6 @@ function loginCheck() {
     effaceEdition()
     bouton_login.textContent = 'login'
   }
-
 }
 function logout() {
   localStorage.removeItem('token')
@@ -189,26 +213,31 @@ function authorize() {
 }
 function affichageBarreEdition() {
   zoneEdition.style.display = "flex";
-  bouton_edition.addEventListener("click", function () {
+  
+  body.style.marginTop="98px"
+  bouton_edition.forEach(bouton=>{ bouton.addEventListener("click", function () {
     page_edition.style.display = "flex";
+    modale.style.display = "flex"
     portfolio_edit.style.display = "flex"
     ajout_photo.style.display = 'none'
     clean()
     getGalleryEdit()
-  });
+  });})
+ 
   page_edition.addEventListener('click', function () {
     close()
   })
 }
 function close() {
-  ajout_photo.style.display = 'none'
-
-  portfolio_edit.style.display = 'none'
+  modale.style.display = "none"
   page_edition.style.display = 'none'
 
 }
 function effaceEdition() {
+  bouton_edition.forEach(bouton=>  bouton.style.display='none')
+
   zoneEdition.style.display = "none";
+  body.style.marginTop="auto"
 }
 function clean() {
   zone_images = document.querySelector(".gallery-edit");
@@ -231,9 +260,10 @@ function affichageAjout() {
   boutonValidé.value = 'Valider'
   titreAjoutPhoto.textContent = 'Ajout photo'
   bouton_ajout.addEventListener('click', function () {
+    modale.style.display = "flex"
     ajout_photo.style.display = 'flex'
     portfolio_edit.style.display = "none"
-    preview.src=''
+    preview.src="./assets/icons/image-import.png"
     titreImage.value = ''
     category.value = ''
     imageInput.value = ''
@@ -243,7 +273,11 @@ function affichageAjout() {
 }
 function affichageAjoutModif(work) {
   console.log(imageInput.files[0])
-  preview.src=''
+  preview.src="./assets/icons/image-import.png"
+  inputZone.style.display='flex'
+  preview.style.marginTop='26px'
+  preview.style.height='46px'
+  preview.style.opacity='0.5'
   titreAjoutPhoto.textContent = work['title']
   ajout_photo.style.display = 'flex'
   boutonValidé.value = 'Modifié'
@@ -251,7 +285,7 @@ function affichageAjoutModif(work) {
   titreImage.value = work['title']
   category.value = work['category']['id']
   imageInput.value = ''
-
+  
   boutonValidé.addEventListener('click', function () { workEdit(work) })
 
 }
@@ -259,6 +293,11 @@ function affichageAjoutModif(work) {
 function changePreviewImage() {
   console.log('file', imageInput.files[0])
   preview.src = "./assets/images/" + imageInput.files[0]['name']
+
+  inputZone.style.display='none'
+  preview.style.marginTop=0
+  preview.style.height='162px'
+  preview.style.opacity='1'
 }
 function recupImg() {
   // Récupérer le fichier image à partir de la zone d'import;
@@ -314,11 +353,9 @@ async function workPost(formData) {
   }
 }
 function removeImage(boutonDel) {
-  let image = boutonDel.parentNode
-  let galery = image.parentNode
-  var index = Array.prototype.indexOf.call(galery.children, image);
-  getWorks().then(
-    data => workDel(data[index]["id"]));
+  let image = boutonDel.offsetParent
+  var index = image.dataset.id
+  workDel(index);
   close()
   reset('Tous')
 }
@@ -327,13 +364,14 @@ function editImage(figcap) {
   let galery = image.parentNode
   console.log(image.firstChild)
   let index = Array.prototype.indexOf.call(galery.children, image);
+  console.log
   getWorks().then(
     data => affichageAjoutModif(data[index]));
 
 
 }
 function workEdit(work) {
-  boutonValidé.removeEventListener('click', function () { workEdit(work) })  
+boutonValidé.removeEventListener('click', function () { workEdit(work) })  
 recupImg()
  workDel(work['id'])
 }
@@ -356,3 +394,4 @@ init()
 authorize()
 getCategory().then(
   data => renderCategoryList(data));
+  butttonCreate()
