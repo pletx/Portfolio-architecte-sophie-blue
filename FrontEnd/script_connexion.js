@@ -52,6 +52,7 @@ function login(data){
 }
 function authorize() {
   if(localStorage.getItem('token')==localStorage.getItem('trueToken')){
+    if(localStorage.getItem('token')!=null){
     window.location.href = "./index.html";
-  }
+  }}
 }
