@@ -20,6 +20,7 @@ const inputZone=document.querySelector(".input-zone")
 const arrow=document.querySelectorAll('.fa-arrow-left')
 console.log(arrow)
 arrow[0].addEventListener('click',function(){ajout_photo.style.display='none'
+titreAjoutPhoto.textContent='Ajouter photo'
 portfolio_edit.style.display = "flex"})
 const xmarks=document.querySelectorAll('.fa-xmark')
 
@@ -362,9 +363,8 @@ function removeImage(boutonDel) {
 function editImage(figcap) {
   let image = figcap.offsetParent
   let galery = image.parentNode
-  console.log(image.firstChild)
+  console.log(figcap)
   let index = Array.prototype.indexOf.call(galery.children, image);
-  console.log
   getWorks().then(
     data => affichageAjoutModif(data[index]));
 
