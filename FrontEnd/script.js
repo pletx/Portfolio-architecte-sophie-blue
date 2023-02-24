@@ -41,14 +41,15 @@ function butttonCreate(){
       bouton.addEventListener("click", function () { reset(bouton.textContent) })
      
     });  
-})}
+})
 boutonValidé.addEventListener('click', function () {
   if (boutonValidé.value == "Valider") {
     recupImg()
-   
   }
-
 })
+bouton_Tous.addEventListener('click', function(){reset('Tous')})
+}
+
 
 function checkPresence(array, element) {
 
