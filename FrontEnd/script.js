@@ -313,7 +313,7 @@ function recupImg() {
   if (titre == '') {
     alert('Entrez un titre')
   }
-  if (category == '') {
+  if (category.value == '') {
     alert('Selectionnez un catergorie')
   }
   
