@@ -105,7 +105,9 @@ function renderWorksEdit(works) {
     imgGallery.className = 'imgGallery'
     let boutonDel = document.createElement("div")
     boutonDel.className = 'boutonDel'
-    boutonDel.addEventListener('click', function () { removeImage(boutonDel) })
+    boutonDel.addEventListener('click', function () {
+       removeImage(boutonDel) 
+      })
     icon=document.createElement('i')
     icon.className="fa-solid fa-trash-can"
     icon.style.color='white'
@@ -254,9 +256,12 @@ function affichageAjout() {
   bouton_ajout.addEventListener('click', function () {
     modale.style.display = "flex"
     ajout_photo.style.display = 'flex'
-    inputZone.style.display='flex'
     portfolio_edit.style.display = "none"
     preview.src="./assets/icons/image-import.png"
+    inputZone.style.display='flex'
+    preview.style.marginTop='26px'
+    preview.style.height='46px'
+    preview.style.opacity='0.5'
 
     titreImage.value = ''
     category.value = ''
@@ -325,7 +330,7 @@ function recupImg() {
     console.log('envoie')
     workPost(formData);
      close()
-    reset('Tous')}}}}
+    }}}}
  
 
 
@@ -351,7 +356,6 @@ function removeImage(boutonDel) {
   var index = image.dataset.id
   workDel(index);
   close()
-  reset('Tous')
 }
 function editImage(figcap) {
   let image = figcap.offsetParent
@@ -368,6 +372,7 @@ function workEdit(work) {
 boutonValidé.removeEventListener('click', function () { workEdit(work) })  
 recupImg()
  workDel(work['id'])
+
 }
 async function workDel(index) {
   try {
@@ -379,6 +384,7 @@ async function workDel(index) {
       }
     });
     console.log(response);
+    reset('Tous')
   } catch (error) {
     console.error(error);
   }
