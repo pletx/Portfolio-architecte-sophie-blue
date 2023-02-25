@@ -10,44 +10,61 @@ const bouton_login = document.querySelector(".bouton-login")
 const category = document.querySelector('#category')
 const boutonValidé = document.querySelector(".bouton-validé")
 const zoneDepot = document.querySelector(".zone-depot")
-const body=document.querySelector('body')
+const body = document.querySelector('body')
 const imageInput = document.querySelector('#image-input')
 const preview = document.querySelector("#preview");
 const titreAjoutPhoto = document.querySelector(".titre-ajout-photo")
-const filter=document.querySelector(".filter")
-const modale=document.querySelector('#modale')
-const inputZone=document.querySelector(".input-zone")
-const arrow=document.querySelectorAll('.fa-arrow-left')
+const filter = document.querySelector(".filter")
+const modale = document.querySelector('#modale')
+const inputZone = document.querySelector(".input-zone")
+const arrow = document.querySelectorAll('.fa-arrow-left')
+bouton_ajout = document.querySelector(".bouton-ajout")
 console.log(arrow)
-arrow[0].addEventListener('click',function(){ajout_photo.style.display='none'
-titreAjoutPhoto.textContent='Ajouter photo'
-portfolio_edit.style.display = "flex"})
-const xmarks=document.querySelectorAll('.fa-xmark')
+arrow[0].addEventListener('click', function () {
+  ajout_photo.style.display = 'none'
+  titreAjoutPhoto.textContent = 'Ajouter photo'
+  portfolio_edit.style.display = "flex"
+})
+const xmarks = document.querySelectorAll('.fa-xmark')
 
 
-xmarks.forEach(xmark=>{
-  xmark.addEventListener('click',function(){close()})
+xmarks.forEach(xmark => {
+  xmark.addEventListener('click', function () { close() })
 })
 
- bouton_login.addEventListener('click', function () { loginCheck() })
+bouton_login.addEventListener('click', function () { loginCheck() })
 
-function butttonCreate(){
+function butttonCreate() {
   getCategory().then(
-    data=> {data.forEach(category => {
-      let bouton=document.createElement('div')
-      bouton.className='bouton_tri bouton-'+category['name'];
-      bouton.textContent=category['name']
-      filter.appendChild(bouton) 
-      bouton.addEventListener("click", function () { reset(bouton.textContent) })
-     
-    });  
-})
-boutonValidé.addEventListener('click', function () {
-  if (boutonValidé.value == "Valider") {
-    recupImg()
-  }
-})
-bouton_Tous.addEventListener('click', function(){reset('Tous')})
+    data => {
+      data.forEach(category => {
+        let bouton = document.createElement('div')
+        bouton.className = 'bouton_tri bouton-' + category['name'];
+        bouton.textContent = category['name']
+        filter.appendChild(bouton)
+        bouton.addEventListener("click", function () { reset(bouton.textContent) })
+
+      });
+    })
+    bouton_ajout.addEventListener('click', function () {
+    modale.style.display = "flex"
+    ajout_photo.style.display = 'flex'
+    portfolio_edit.style.display = "none"
+    preview.src = "./assets/icons/image-import.png"
+    inputZone.style.display = 'flex'
+    preview.style.marginTop = '26px'
+    preview.style.height = '46px'
+    preview.style.opacity = '0.5'
+    titreImage.value = ''
+    category.value = ''
+    imageInput.value = ''
+  })
+  boutonValidé.addEventListener('click', function () {
+    if (boutonValidé.value == "Valider") {
+      recupImg()
+    }
+  })
+  bouton_Tous.addEventListener('click', function () { reset('Tous') })
 }
 
 
@@ -60,14 +77,14 @@ function tri(data, type) {
   let tableauTitre = []
   if (type == 'Tous') {
     for (let travaux in data) {
-        tableau_trié.push(data[travaux]);
-      }
+      tableau_trié.push(data[travaux]);
     }
+  }
   else {
     for (let travaux in data) {
-      console.log( type, data[travaux]['category']['name'])
+      console.log(type, data[travaux]['category']['name'])
       if (data[travaux]['category']['name'] == type) {
-          tableau_trié.push(data[travaux]);
+        tableau_trié.push(data[travaux]);
       }
     }
     console.log('tableau trié', tableau_trié)
@@ -98,7 +115,7 @@ function renderWorks(works) {
 }
 function renderWorksEdit(works) {
   works.forEach(projet => {
-  
+
     let img = document.createElement("img");
     let figcap = document.createElement("figcaption")
     let imgGallery = document.createElement("div")
@@ -106,11 +123,11 @@ function renderWorksEdit(works) {
     let boutonDel = document.createElement("div")
     boutonDel.className = 'boutonDel'
     boutonDel.addEventListener('click', function () {
-       removeImage(boutonDel) 
-      })
-    icon=document.createElement('i')
-    icon.className="fa-solid fa-trash-can"
-    icon.style.color='white'
+      removeImage(boutonDel)
+    })
+    icon = document.createElement('i')
+    icon.className = "fa-solid fa-trash-can"
+    icon.style.color = 'white'
     boutonDel.appendChild(icon)
     img.src = projet.imageUrl;
     img.crossOrigin = "anonymous";
@@ -120,7 +137,7 @@ function renderWorksEdit(works) {
     imgGallery.appendChild(img);
     imgGallery.appendChild(figcap);
     imgGallery.appendChild(boutonDel)
-    imgGallery.dataset.id=projet['id']
+    imgGallery.dataset.id = projet['id']
 
 
 
@@ -207,17 +224,19 @@ function authorize() {
 }
 function affichageBarreEdition() {
   zoneEdition.style.display = "flex";
-  
-  body.style.marginTop="98px"
-  bouton_edition.forEach(bouton=>{ bouton.addEventListener("click", function () {
-    page_edition.style.display = "flex";
-    modale.style.display = "flex"
-    portfolio_edit.style.display = "flex"
-    ajout_photo.style.display = 'none'
-    clean()
-    getGalleryEdit()
-  });})
- 
+
+  body.style.marginTop = "98px"
+  bouton_edition.forEach(bouton => {
+    bouton.addEventListener("click", function () {
+      page_edition.style.display = "flex";
+      modale.style.display = "flex"
+      portfolio_edit.style.display = "flex"
+      ajout_photo.style.display = 'none'
+      clean()
+      getGalleryEdit()
+    });
+  })
+
   page_edition.addEventListener('click', function () {
     close()
   })
@@ -228,10 +247,10 @@ function close() {
 
 }
 function effaceEdition() {
-  bouton_edition.forEach(bouton=>  bouton.style.display='none')
+  bouton_edition.forEach(bouton => bouton.style.display = 'none')
 
   zoneEdition.style.display = "none";
-  body.style.marginTop="auto"
+  body.style.marginTop = "auto"
 }
 function clean() {
   zone_images = document.querySelector(".gallery-edit");
@@ -249,34 +268,19 @@ function getGalleryEdit() {
 
 }
 function affichageAjout() {
-  
-  bouton_ajout = document.querySelector(".bouton-ajout")
+
   boutonValidé.value = 'Valider'
   titreAjoutPhoto.textContent = 'Ajout photo'
-  bouton_ajout.addEventListener('click', function () {
-    modale.style.display = "flex"
-    ajout_photo.style.display = 'flex'
-    portfolio_edit.style.display = "none"
-    preview.src="./assets/icons/image-import.png"
-    inputZone.style.display='flex'
-    preview.style.marginTop='26px'
-    preview.style.height='46px'
-    preview.style.opacity='0.5'
 
-    titreImage.value = ''
-    category.value = ''
-    imageInput.value = ''
-
-  })
 
 }
 function affichageAjoutModif(work) {
   console.log(imageInput.files[0])
-  preview.src="./assets/icons/image-import.png"
-  inputZone.style.display='flex'
-  preview.style.marginTop='26px'
-  preview.style.height='46px'
-  preview.style.opacity='0.5'
+  preview.src = "./assets/icons/image-import.png"
+  inputZone.style.display = 'flex'
+  preview.style.marginTop = '26px'
+  preview.style.height = '46px'
+  preview.style.opacity = '0.5'
   titreAjoutPhoto.textContent = work['title']
   ajout_photo.style.display = 'flex'
   boutonValidé.value = 'Modifié'
@@ -284,7 +288,7 @@ function affichageAjoutModif(work) {
   titreImage.value = work['title']
   category.value = work['category']['id']
   imageInput.value = ''
-  
+
   boutonValidé.addEventListener('click', function () { workEdit(work) })
 
 }
@@ -293,10 +297,10 @@ function changePreviewImage() {
   console.log('file', imageInput.files[0])
   preview.src = "./assets/images/" + imageInput.files[0]['name']
 
-  inputZone.style.display='none'
-  preview.style.marginTop=0
-  preview.style.height='162px'
-  preview.style.opacity='1'
+  inputZone.style.display = 'none'
+  preview.style.marginTop = 0
+  preview.style.height = '162px'
+  preview.style.opacity = '1'
 }
 function recupImg() {
   // Récupérer le fichier image à partir de la zone d'import;
@@ -311,8 +315,8 @@ function recupImg() {
   const imageType = document.querySelector('#category').value;
   formData.append('title', titre);
   formData.append('category', imageType);
-  console.log("Imagefile",imageFile);
-  if(imageFile == undefined){
+  console.log("Imagefile", imageFile);
+  if (imageFile == undefined) {
     alert('Entrez une image')
   }
   if (titre == '') {
@@ -321,17 +325,20 @@ function recupImg() {
   if (category.value == '') {
     alert('Selectionnez un catergorie')
   }
-  
 
-  else{
-    if (titre != ''){
-   if (category != '') {
-    if(imageFile !=undefined){
-    console.log('envoie')
-    workPost(formData);
-     close()
-    }}}}
- 
+
+  else {
+    if (titre != '') {
+      if (category != '') {
+        if (imageFile != undefined) {
+          console.log('envoie')
+          workPost(formData);
+          close()
+        }
+      }
+    }
+  }
+
 
 
 }
@@ -360,7 +367,7 @@ function removeImage(boutonDel) {
 function editImage(figcap) {
   let image = figcap.offsetParent
   let galery = image.parentNode
- 
+
   let index = Array.prototype.indexOf.call(galery.children, image);
   console.log(index)
   getWorks().then(
@@ -369,9 +376,9 @@ function editImage(figcap) {
 
 }
 function workEdit(work) {
-boutonValidé.removeEventListener('click', function () { workEdit(work) })  
-recupImg()
- workDel(work['id'])
+  boutonValidé.removeEventListener('click', function () { workEdit(work) })
+  recupImg()
+  workDel(work['id'])
 
 }
 async function workDel(index) {
@@ -394,4 +401,4 @@ init()
 authorize()
 getCategory().then(
   data => renderCategoryList(data));
-  butttonCreate()
+butttonCreate()
