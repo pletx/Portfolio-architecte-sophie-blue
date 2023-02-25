@@ -52,7 +52,6 @@ bouton_Tous.addEventListener('click', function(){reset('Tous')})
 
 
 function checkPresence(array, element) {
-
   return array.includes(element);
 }
 
@@ -61,23 +60,14 @@ function tri(data, type) {
   let tableauTitre = []
   if (type == 'Tous') {
     for (let travaux in data) {
-      if (checkPresence(tableauTitre, data[travaux]['title']) == false) {
         tableau_trié.push(data[travaux]);
-        tableauTitre.push(data[travaux]['title'])
       }
     }
-  }
   else {
     for (let travaux in data) {
-      console.log("..................", type, data[travaux]['category']['name'])
+      console.log( type, data[travaux]['category']['name'])
       if (data[travaux]['category']['name'] == type) {
-        if (checkPresence(tableauTitre, data[travaux]['title']) == false) {
           tableau_trié.push(data[travaux]);
-          tableauTitre.push(data[travaux]['title'])
-        }
-        if (checkPresence(tableauTitre, data[travaux]['title']) == true) {
-          workDel(data[travaux]['category']['id'])
-        }
       }
     }
     console.log('tableau trié', tableau_trié)
@@ -264,8 +254,10 @@ function affichageAjout() {
   bouton_ajout.addEventListener('click', function () {
     modale.style.display = "flex"
     ajout_photo.style.display = 'flex'
+    inputZone.style.display='flex'
     portfolio_edit.style.display = "none"
     preview.src="./assets/icons/image-import.png"
+
     titreImage.value = ''
     category.value = ''
     imageInput.value = ''
@@ -364,8 +356,9 @@ function removeImage(boutonDel) {
 function editImage(figcap) {
   let image = figcap.offsetParent
   let galery = image.parentNode
-  console.log(figcap)
+ 
   let index = Array.prototype.indexOf.call(galery.children, image);
+  console.log(index)
   getWorks().then(
     data => affichageAjoutModif(data[index]));
 
