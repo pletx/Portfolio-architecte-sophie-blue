@@ -59,22 +59,14 @@ function butttonCreate() {
     category.value = ''
     imageInput.value = ''
   })
+  boutonValidé.addEventListener('click', function () {
+    if (boutonValidé.value == "Valider") {
+      recupImg()
+    }
+  })
   bouton_Tous.addEventListener('click', function () { reset('Tous') })
 }
-function creatValide(text,work){
-boutonValidé.remove()
-boutonValidé=document.createElement('input')
-boutonValidé.type='submit'
-boutonValidé.value=text
-ajout_photo.appendChild(boutonValidé)
-boutonValidé.addEventListener('click', function () {
-  if (boutonValidé.value == "Valider") {
-    recupImg()
-  }
-  else{
-    workEdit(work)
-  }
-})}
+
 
 function checkPresence(array, element) {
   return array.includes(element);
@@ -276,6 +268,7 @@ function getGalleryEdit() {
 
 }
 function affichageAjout() {
+
   boutonValidé.value = 'Valider'
   titreAjoutPhoto.textContent = 'Ajout photo'
 
@@ -290,11 +283,12 @@ function affichageAjoutModif(work) {
   preview.style.opacity = '0.5'
   titreAjoutPhoto.textContent = work['title']
   ajout_photo.style.display = 'flex'
-  creatValide("Modifier",work)
+  boutonValidé.value = 'Modifié'
   portfolio_edit.style.display = "none"
   titreImage.value = work['title']
   category.value = work['category']['id']
   imageInput.value = ''
+  boutonValidé.addEventListener('click', function () { workEdit(work) })
 }
 
 function changePreviewImage() {
@@ -380,10 +374,10 @@ function editImage(figcap) {
 
 }
 function workEdit(work) {
-  boutonValidé.remove()
   recupImg()
   workDel(work['id'])
-
+  reset('Tous')
+  
 }
 async function workDel(index) {
   try {
