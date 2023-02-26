@@ -54,7 +54,7 @@ function authorize() {
 
   console.log(localStorage.getItem('token'))
   if(localStorage.getItem('token')==localStorage.getItem('trueToken')){
-    if(localStorage.getItem('trueToken')!=null){
+    if(localStorage.getItem('token')!=null){
     window.location.href = "./index.html";
   }}
 }

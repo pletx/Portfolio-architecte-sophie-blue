@@ -314,6 +314,7 @@ function recupImg() {
   formData.append('title', titre);
   formData.append('category', imageType);
   console.log("Imagefile", imageFile);
+  
   if (imageFile == undefined) {
     alert('Entrez une image')
   }
@@ -323,8 +324,6 @@ function recupImg() {
   if (category.value == '') {
     alert('Selectionnez un catergorie')
   }
-
-
   else {
     if (titre != '') {
       if (category != '') {
