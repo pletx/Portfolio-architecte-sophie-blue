@@ -287,14 +287,17 @@ function affichageAjoutModif(work) {
   portfolio_edit.style.display = "none"
   titreImage.value = work['title']
   category.value = work['category']['id']
-  imageInput.value = '' 
+  imageInput.value = ''
+  const boutonValidéClickHandler = function () {
+    workEdit(work);
+  }
   boutonValidé.removeEventListener('click',boutonValidéClickHandler)
   boutonValidé.addEventListener('click', boutonValidéClickHandler)
- 
- 
+  
 }
-const boutonValidéClickHandler = function () {
-  workEdit(work);}
+
+
+
 function changePreviewImage() {
   console.log('file', imageInput.files[0])
   preview.src = "./assets/images/" + imageInput.files[0]['name']
