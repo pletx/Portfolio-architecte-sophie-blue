@@ -1,12 +1,12 @@
-let zone_images = document.querySelector(".gallery");
-const bouton_Tous = document.querySelector(".bouton-Tous");
-const bouton_edition = document.querySelectorAll('.bouton-edition')
-const page_edition = document.querySelector('#page-edition')
-const ajout_photo = document.querySelector('.ajout-photo')
+let zoneImages = document.querySelector(".gallery");
+const boutonTous = document.querySelector(".bouton-Tous");
+const boutonEdition = document.querySelectorAll('.bouton-edition')
+const pageEdition = document.querySelector('#page-edition')
+const ajoutPhoto = document.querySelector('.ajout-photo')
 const zoneEdition = document.querySelector('#zone-mode-edition')
-const portfolio_edit = document.querySelector('.portfolio-edit')
+const portfolioEdit = document.querySelector('.portfolio-edit')
 const titreImage = document.querySelector('#titre-image')
-const bouton_login = document.querySelector(".bouton-login")
+const boutonLogin = document.querySelector(".bouton-login")
 const category = document.querySelector('#category')
 const boutonValidé = document.querySelector(".bouton-validé")
 const zoneDepot = document.querySelector(".zone-depot")
@@ -18,12 +18,13 @@ const filter = document.querySelector(".filter")
 const modale = document.querySelector('#modale')
 const inputZone = document.querySelector(".input-zone")
 const arrow = document.querySelectorAll('.fa-arrow-left')
-bouton_ajout = document.querySelector(".bouton-ajout")
+boutonAjout = document.querySelector(".bouton-ajout")
+let boutonValideEventListener = 0
 console.log(arrow)
 arrow[0].addEventListener('click', function () {
-  ajout_photo.style.display = 'none'
+  ajoutPhoto.style.display = 'none'
   titreAjoutPhoto.textContent = 'Ajouter photo'
-  portfolio_edit.style.display = "flex"
+  portfolioEdit.style.display = "flex"
 })
 const xmarks = document.querySelectorAll('.fa-xmark')
 
@@ -32,7 +33,7 @@ xmarks.forEach(xmark => {
   xmark.addEventListener('click', function () { close() })
 })
 
-bouton_login.addEventListener('click', function () { loginCheck() })
+boutonLogin.addEventListener('click', function () { loginCheck() })
 
 function butttonCreate() {
   getCategory().then(
@@ -42,14 +43,24 @@ function butttonCreate() {
         bouton.className = 'bouton_tri bouton-' + category['name'];
         bouton.textContent = category['name']
         filter.appendChild(bouton)
-        bouton.addEventListener("click", function () { reset(bouton.textContent) })
+
+        
+        bouton.addEventListener("click", function () { 
+        bouton_tri=document.querySelectorAll('.bouton_tri')
+        bouton_tri.forEach(tri =>{
+          tri.style.backgroundColor='white',
+          tri.style.color='#1D6154'
+         } )
+        bouton.style.color='rgb(255, 255, 255)'
+	      bouton.style.backgroundColor='#1D6154'
+          reset(bouton.textContent) })
 
       });
     })
-    bouton_ajout.addEventListener('click', function () {
+  boutonAjout.addEventListener('click', function () {
     modale.style.display = "flex"
-    ajout_photo.style.display = 'flex'
-    portfolio_edit.style.display = "none"
+    ajoutPhoto.style.display = 'flex'
+    portfolioEdit.style.display = "none"
     preview.src = "./assets/icons/image-import.png"
     inputZone.style.display = 'flex'
     preview.style.marginTop = '26px'
@@ -64,7 +75,14 @@ function butttonCreate() {
       recupImg()
     }
   })
-  bouton_Tous.addEventListener('click', function () { reset('Tous') })
+  boutonTous.addEventListener('click', function () { 
+    bouton_tri.forEach(tri =>{
+      tri.style.backgroundColor='white',
+      tri.style.color='#1D6154'
+     } )
+     boutonTous.style.color='rgb(255, 255, 255)'
+     boutonTous.style.backgroundColor='#1D6154'
+    reset('Tous') })
 }
 
 
@@ -73,34 +91,34 @@ function checkPresence(array, element) {
 }
 
 function tri(data, type) {
-  let tableau_trié = []
+  let tableauTrié = []
   let tableauTitre = []
   if (type == 'Tous') {
     for (let travaux in data) {
-      tableau_trié.push(data[travaux]);
+      tableauTrié.push(data[travaux]);
     }
   }
   else {
     for (let travaux in data) {
       console.log(type, data[travaux]['category']['name'])
       if (data[travaux]['category']['name'] == type) {
-        tableau_trié.push(data[travaux]);
+        tableauTrié.push(data[travaux]);
       }
     }
-    console.log('tableau trié', tableau_trié)
+    console.log('tableau trié', tableauTrié)
   }
-  return tableau_trié
+  return tableauTrié
 
 }
 function reset(type) {
   console.log('reset')
-  zone_images = document.querySelector(".gallery");
-  zone_images.innerHTML = "";
+  zoneImages = document.querySelector(".gallery");
+  zoneImages.innerHTML = "";
   getWorks().then(
     data => renderWorks(tri(data, type)));
 }
 function renderWorks(works) {
-  zone_images = document.querySelector(".gallery");
+  zoneImages = document.querySelector(".gallery");
   works.forEach(projet => {
     let img = document.createElement("img");
     let figure = document.createElement("figure")
@@ -110,7 +128,7 @@ function renderWorks(works) {
     figure.appendChild(img)
     figcap.innerHTML = projet.title
     figure.appendChild(figcap)
-    zone_images.appendChild(figure);
+    zoneImages.appendChild(figure);
   });
 }
 function renderWorksEdit(works) {
@@ -133,7 +151,7 @@ function renderWorksEdit(works) {
     img.crossOrigin = "anonymous";
     figcap.innerHTML = 'éditer';
     figcap.addEventListener('click', function () { editImage(figcap) })
-    zone_images.appendChild(imgGallery)
+    zoneImages.appendChild(imgGallery)
     imgGallery.appendChild(img);
     imgGallery.appendChild(figcap);
     imgGallery.appendChild(boutonDel)
@@ -144,8 +162,8 @@ function renderWorksEdit(works) {
   });
 }
 function loginCheck() {
-  console.log(bouton_login.textContent)
-  if (bouton_login.textContent == 'login') {
+  console.log(boutonLogin.textContent)
+  if (boutonLogin.textContent == 'login') {
 
     window.location.href = "./page_login.html"
   }
@@ -153,7 +171,7 @@ function loginCheck() {
   else {
     logout()
     effaceEdition()
-    bouton_login.textContent = 'login'
+    boutonLogin.textContent = 'login'
   }
 }
 function logout() {
@@ -161,7 +179,6 @@ function logout() {
 }
 function renderCategoryList(categoryList) {
   console.log('categoryList', categoryList)
-
   categoryList.forEach(type => {
     console.log('type', type)
     let option = document.createElement('option')
@@ -217,7 +234,7 @@ function authorize() {
   }
   if (token == trueToken) {
     if (trueToken != null) {
-      bouton_login.textContent = 'logout'
+      boutonLogin.textContent = 'logout'
       affichageBarreEdition()
     }
   }
@@ -226,38 +243,38 @@ function affichageBarreEdition() {
   zoneEdition.style.display = "flex";
 
   body.style.marginTop = "98px"
-  bouton_edition.forEach(bouton => {
+  boutonEdition.forEach(bouton => {
     bouton.addEventListener("click", function () {
-      page_edition.style.display = "flex";
+      pageEdition.style.display = "flex";
       modale.style.display = "flex"
-      portfolio_edit.style.display = "flex"
-      ajout_photo.style.display = 'none'
+      portfolioEdit.style.display = "flex"
+      ajoutPhoto.style.display = 'none'
       clean()
       getGalleryEdit()
     });
   })
 
-  page_edition.addEventListener('click', function () {
+  pageEdition.addEventListener('click', function () {
     close()
   })
 }
 function close() {
   modale.style.display = "none"
-  page_edition.style.display = 'none'
+  pageEdition.style.display = 'none'
 
 }
 function effaceEdition() {
-  bouton_edition.forEach(bouton => bouton.style.display = 'none')
+  boutonEdition.forEach(bouton => bouton.style.display = 'none')
 
   zoneEdition.style.display = "none";
   body.style.marginTop = "auto"
 }
 function clean() {
-  zone_images = document.querySelector(".gallery-edit");
-  zone_images.innerHTML = ""
+  zoneImages = document.querySelector(".gallery-edit");
+  zoneImages.innerHTML = ""
 }
 function getGalleryEdit() {
-  zone_images = document.querySelector(".gallery-edit");
+  zoneImages = document.querySelector(".gallery-edit");
   fetch('http://localhost:5678/api/works')
     .then(response => response.json())
     .then(data => {
@@ -275,38 +292,44 @@ function affichageAjout() {
 
 }
 function affichageAjoutModif(work) {
-  console.log(imageInput.files[0])
+  console.log(work)
   preview.src = "./assets/icons/image-import.png"
   inputZone.style.display = 'flex'
   preview.style.marginTop = '26px'
   preview.style.height = '46px'
   preview.style.opacity = '0.5'
   titreAjoutPhoto.textContent = work['title']
-  ajout_photo.style.display = 'flex'
+  ajoutPhoto.style.display = 'flex'
   boutonValidé.value = 'Modifié'
-  portfolio_edit.style.display = "none"
+  portfolioEdit.style.display = "none"
   titreImage.value = work['title']
   category.value = work['category']['id']
   imageInput.value = ''
   const boutonValidéClickHandler = function () {
+    console.log(boutonValidé);
     workEdit(work);
   }
-  boutonValidé.removeEventListener('click',boutonValidéClickHandler)
-  boutonValidé.addEventListener('click', boutonValidéClickHandler)
-  
+console.log(boutonValideEventListener)
+  if (boutonValideEventListener < 1) {
+    boutonValidé.addEventListener('click', boutonValidéClickHandler);
+  }
+  boutonValideEventListener += 1
 }
-
-
 
 function changePreviewImage() {
   console.log('file', imageInput.files[0])
+  const parts = imageInput.files[0]['name'].split(".");
+  const extension = parts[parts.length - 1];
+if (extension !== "jpg" && extension !== "png") {
+  alert("Erreur: extension de fichier invalide");
+}
+else{
   preview.src = "./assets/images/" + imageInput.files[0]['name']
-
   inputZone.style.display = 'none'
   preview.style.marginTop = 0
   preview.style.height = '162px'
   preview.style.opacity = '1'
-}
+}}
 function recupImg() {
   // Récupérer le fichier image à partir de la zone d'import;
   const imageFile = imageInput.files[0];
@@ -321,7 +344,7 @@ function recupImg() {
   formData.append('title', titre);
   formData.append('category', imageType);
   console.log("Imagefile", imageFile);
-  
+
   if (imageFile == undefined) {
     alert('Entrez une image')
   }
@@ -383,7 +406,7 @@ function workEdit(work) {
   recupImg()
   workDel(work['id'])
   reset('Tous')
-  
+
 }
 async function workDel(index) {
   try {
