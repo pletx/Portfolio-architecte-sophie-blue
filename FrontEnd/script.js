@@ -133,7 +133,6 @@ function renderWorks(works) {
 }
 function renderWorksEdit(works) {
   works.forEach(projet => {
-
     let img = document.createElement("img");
     let figcap = document.createElement("figcaption")
     let imgGallery = document.createElement("div")
@@ -150,6 +149,7 @@ function renderWorksEdit(works) {
     img.src = projet.imageUrl;
     img.crossOrigin = "anonymous";
     figcap.innerHTML = 'éditer';
+    figcap.className="bouton-edition "
     figcap.addEventListener('click', function () { editImage(figcap) })
     zoneImages.appendChild(imgGallery)
     imgGallery.appendChild(img);
@@ -222,22 +222,17 @@ function init() {
  */
 function authorize() {
   let token = localStorage.getItem('token');
-  let trueToken = localStorage.getItem('trueToken')
-  console.log(token, trueToken)
-  if (token == null) {
+  console.log(token)
+  if (token != null) {
+  if (token != 'undefined') {
+    boutonLogin.textContent = 'logout'
+    affichageBarreEdition()
+  }}
+  else{
     console.log('le token n existe pas')
-    effaceEdition()
-  }
-  if (token == 'undefined') {
-    console.log('le token n existe pas')
-    effaceEdition()
-  }
-  if (token == trueToken) {
-    if (trueToken != null) {
-      boutonLogin.textContent = 'logout'
-      affichageBarreEdition()
+      effaceEdition()
+   
     }
-  }
 }
 function affichageBarreEdition() {
   zoneEdition.style.display = "flex";

@@ -23,9 +23,9 @@ form.addEventListener("submit", function(event) {
     .then(data => {
       localStorage.setItem('token',data.token)
       if(localStorage.getItem('token')=="undefined"){
-        alert('Email ou mot de passe Eronné.Veuillez réessayer.');
+        alert('Email ou mot de passe éronné.Veuillez réessayer.');
       }
-      login(data)
+      login()
       
     })
     .catch(error => {
@@ -33,19 +33,18 @@ form.addEventListener("submit", function(event) {
       
     });
 });
-function tokenAdmin(data){
+function tokenAdmin(){
   if(email.value=="sophie.bluel@test.tld"){
     if(localStorage.getItem('token') == 'undefined'){
     return false}
-    else{    
-      localStorage.setItem('trueToken',data.token)
+    else{ 
       return true
     }
   }
  
 }
-function login(data){
-  if (tokenAdmin(data)==true ){
+function login(){
+  if (tokenAdmin()==true ){
     console.log(localStorage)
     window.location.href = "./index.html";
   }
@@ -53,7 +52,7 @@ function login(data){
 function authorize() {
 
   console.log(localStorage.getItem('token'))
-  if(localStorage.getItem('token')==localStorage.getItem('trueToken')){
+  if(localStorage.getItem('token')!='undefined'){
     if(localStorage.getItem('token')!=null){
     window.location.href = "./index.html";
   }}
